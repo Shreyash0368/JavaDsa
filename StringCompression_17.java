@@ -21,15 +21,11 @@ public class StringCompression_17 {
                 counter++;
             }
             else {
-                if (counter == 1) { // if counter is 1 no need to append the counter
-                    counter = 1;
-                    temp.append(s1.charAt(i));
-                }
-                else {
+                if (counter > 1) { // if counter is > 1, only then append counter 
                     temp.append(counter.toString()); 
-                    temp.append(s1.charAt(i)); // apend the next char after appending counter 
-                    counter = 1;
-                }
+                }                        
+                temp.append(s1.charAt(i)); // apend the next char after appending counter 
+                counter = 1;                
             }
         }
 
