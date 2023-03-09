@@ -46,6 +46,21 @@ public class BackTrackingBasics_23 {
         }
 
     }
+
+    // *grid ways,
+    //  given and n*m 2D array, find the no of possible paths that a point from 0,0 to n-1,m-1.
+    // we can move in only two directions either right or down
+
+    public static int gridWays(int array[][], int x, int y) {
+        if (x == array.length - 1 || y == array[0].length - 1) {  // if we are in the last row or column then there is only 1 possible path to reach the end point
+            return 1;
+        } else if (x == array.length || y == array[0].length) { // out of bounds .i.e. no possible way
+            return 0;
+        }
+
+        return gridWays(array, x+1, y) + gridWays(array, x, y+1); // for a point x,y the no of possible ways are equal to the sum of possible ways of the cell at adjacent right and adjacent down
+    }
+
     public static void main(String[] args) {
         // int [] array = new int[5];
         // backTrackArray(array, 0);
@@ -53,10 +68,15 @@ public class BackTrackingBasics_23 {
         // for (int i = 0; i < array.length; i++) {
         //     System.out.print(array[i] + " ");
         // }
+        
+        int n = 3;
+        int array[][] = new int[n][n];
 
         String ans = new String();
         // stringSubset("abc", ans, 0);
         stringPermutation("abc", ans);
+
+        System.out.println(gridWays(array, 0, 0));
 
     }
 }
