@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class ZigZagLL {
+public class ZigZagLL_26 {
     public static class Node {
         int data;
         Node next;
@@ -97,7 +97,7 @@ public class ZigZagLL {
     } 
 
     public static void main(String[] args) {
-        ZigZagLL ll = new ZigZagLL();
+        ZigZagLL_26 ll = new ZigZagLL_26();
         ll.addFirst(1);
         ll.addLast(2);
         ll.addLast(3);
