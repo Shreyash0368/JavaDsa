@@ -185,6 +185,47 @@ public class GraphSupllement_43 {
         }
     }
 
+    public static void articulationPoint(ArrayList<Edge> graph[]) {
+        boolean vis[] = new boolean[graph.length];
+        int artPoint[] = new int[graph.length];
+        int depth[] = new int[graph.length];
+        int lowest[] = new int[graph.length];
+
+        articulationPointUtil(graph, 0, -1, vis, depth, lowest, artPoint, 1);
+
+        for (int i = 0; i < artPoint.length; i++) {
+            if (artPoint[i] != 0) {
+                System.out.println(i + " ");
+            }
+        }
+        System.out.println();
+    }
+
+    private static void articulationPointUtil(ArrayList<Edge> graph[], int curr, int parent, boolean vis[], int depth[], int lowest[],int artPoint[], int currDepth) {
+        if (vis[curr]) return;
+        vis[curr] = true;
+        depth[curr] = lowest[curr] = currDepth;
+
+        for (int i = 0; i < graph[curr].size(); i++) {
+            Edge e = graph[curr].get(i);
+            if (e.dest == parent) continue;
+
+            if (!vis[e.dest]) {
+                articulationPointUtil(graph, e.dest, curr, vis, depth, lowest,artPoint, currDepth + 1);
+                lowest[curr] = Math.min(lowest[curr], lowest[e.dest]);
+            }
+            else {
+                lowest[curr] = Math.min(lowest[curr], depth[e.dest]);
+            }
+
+            if (lowest[e.dest] >= depth[curr] && parent != -1) artPoint[curr] = 1;
+        }
+
+        if (parent == -1 && graph[curr].size() > 1) {
+            artPoint[curr] = 1;
+        }
+    }
+
     public static void main(String[] args) {
         int v = 7;
         ArrayList<Edge> graph[] = new ArrayList[v];
@@ -201,6 +242,8 @@ public class GraphSupllement_43 {
         createGraphDirected(graph2);
         System.out.println("----------");
         System.out.println(stronglyConnected(graph2));
+        System.out.println("----------");
+        articulationPoint(graph);
 
     }
 }
