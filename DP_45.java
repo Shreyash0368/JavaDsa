@@ -126,6 +126,52 @@ public class DP_45 {
         return (max);
     }
 
+    public static boolean targetSum(int[] arr, int target) {
+        int[][] dp = new int[arr.length][target + 1];
+        for (int i = 0; i < dp.length; i++) {
+            Arrays.fill(dp[i], -1);
+        }
+        targetSumUtil(arr,dp, target, arr.length - 1);
+        return dp[arr.length - 1][target] == 1;
+    }
+
+    private static int targetSumUtil(int[] arr,int[][] dp, int target, int n) {
+        if (target == 0) return dp[n][target] = 1;
+        if (n == 0) return dp[n][target] = (arr[0] == target)? 1 :  0;
+
+        if (dp[n][target] != -1) return dp[n][target];
+
+        int notTake = targetSumUtil(arr,dp, target, n - 1);
+        int take = 0;
+        if (arr[n] <= target) take = targetSumUtil(arr,dp, target - arr[n], n - 1);
+
+        return dp[n][target] = (take == 1 || notTake == 1) ? 1 : 0;
+    }
+
+    public static boolean targetSumTabulation(int[] arr, int target) {
+        boolean[][] dp = new boolean[arr.length][target + 1];
+
+        // base case when target is 0
+        for (int i = 0; i < dp.length; i++) {
+            dp[i][0] = true;
+        }
+
+        // base case when only 1 element
+        if (arr[0] <= target) dp[0][arr[0]] = true;
+
+        for (int n = 1; n < arr.length; n++) {
+            for (int t = 1; t < target + 1; t++) {
+                boolean notTake = dp[n - 1][t];
+                boolean take = false;
+                if (arr[n] <= t) take = dp[n - 1][t - arr[n]];
+                dp[n][t] = take || notTake;
+            }
+        }
+
+        return dp[arr.length - 1][target];
+    }
+
+
     public static void main(String[] args) {
         int[] val = { 30, 40, 60 };
         int[] wt = { 3, 2, 4 };
@@ -133,11 +179,14 @@ public class DP_45 {
         System.out.println(zeroOneKanpsackTabulation(val, wt, 5));
         System.out.println("-------------");
         int[][] sch = {
-                { 1,2,5 },
-                { 3,1,1 },
-                { 3,3,3 }
+            { 1,2,5 },
+            { 3,1,1 },
+            { 3,3,3 }
         };
         System.out.println(ninjaTraining(sch));
         System.out.println(ninjaTrainingTabulation(sch));
+        System.out.println("-------------");
+        int[] arr = {2, 5, 1, 6, 7};
+        System.out.println(targetSum(arr, 12));
     }
 }
