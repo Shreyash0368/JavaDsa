@@ -171,6 +171,49 @@ public class DP_45 {
         return dp[arr.length - 1][target];
     }
 
+    public static int unboundedKanpsack(int[] weight, int[] val, int k) {
+        int[][] dp = new int[val.length][k + 1];
+        for (int i = 0; i<dp.length; i++) {
+            Arrays.fill(dp[i], -1);
+        }
+        
+        return kanpsackUtil(weight, val, dp, val.length - 1, k);
+    }
+
+    private static int kanpsackUtil(int[] weight, int[] val,int[][] dp, int n, int k) {
+        if (k == 0) return dp[n][k] = 0;
+        if (n == 0 ) return dp[n][k] = (k / weight[0]) * val[0];
+
+        if (dp[n][k] != -1) return dp[n][k];
+
+        
+        int notTake = 0 + kanpsackUtil(weight, val, dp, n - 1, k);
+        int take = 0;
+        if (weight[n] <= k) take = val[n] + kanpsackUtil(weight, val, dp, n, k - weight[n]);
+
+        return dp[n][k] = Math.max(notTake, take);
+    }
+
+    public static int unboundedKanpsackTabulation(int[] weight, int[] val, int k) {
+        int[][] dp = new int[val.length][k + 1];
+        
+        for (int i = 0; i < dp[0].length; i++) {
+            if (i >= weight[0]) dp[0][i] = (int)((i / weight[0]) * val[0]);
+        }
+
+        for (int n = 1; n < dp.length; n++) {
+            for (int tar = 0; tar < dp[n].length; tar++) {                 
+                int notTake = 0 + dp[n - 1][tar];
+                int take = 0;
+                if (weight[n] <= tar) take = val[n] + dp[n][tar - weight[n]];
+                dp[n][tar] = Math.max(notTake, take);            
+            }
+        }
+
+        return dp[val.length - 1][k];
+    }
+   
+
 
     public static void main(String[] args) {
         int[] val = { 30, 40, 60 };
@@ -188,5 +231,11 @@ public class DP_45 {
         System.out.println("-------------");
         int[] arr = {2, 5, 1, 6, 7};
         System.out.println(targetSum(arr, 12));
+
+        System.out.println("---------------");
+        int[] weight = {10, 8, 6, 3, 1, 9, 5, 7, 4, 2};
+        int[] profit = {3, 4, 9, 7, 5, 10, 8, 2, 6, 1};
+        System.out.println(unboundedKanpsack(weight, profit, 5));
+        System.out.println(unboundedKanpsackTabulation(weight, profit, 5));
     }
 }
