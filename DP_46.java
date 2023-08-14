@@ -98,4 +98,47 @@ public class DP_46 {
         return dp[len][len];
     }
 
+    public static int lcs(String s1, String s2) {
+        int[][] dp = new int[s1.length()][s2.length()];
+        for (int i = 0; i < dp.length; i++) {
+            Arrays.fill(dp[i], -1);
+        }
+        return lcsUtil(s1, s2, s1.length() - 1, s2.length() - 1, dp);
+    }
+
+    private static int lcsUtil(String s1, String s2, int i1, int i2, int[][] dp) {
+        if (i1 < 0 || i2 < 0)
+            return 0;
+        if (s1.charAt(i1) == s2.charAt(i2))
+            return dp[i1][i2] = 1 + lcsUtil(s1, s2, i1 - 1, i2 - 1, dp);
+
+        if (dp[i1][i2] != -1)
+            return dp[i1][i2];
+
+        int t1 = lcsUtil(s1, s2, i1 - 1, i2, dp);
+        int t2 = lcsUtil(s1, s2, i1, i2 - 1, dp);
+
+        return dp[i1][i2] = Math.max(t1, t2);
+    }
+
+    public static int lcsTabulation(String s1, String s2) {
+        int[][] dp = new int[s1.length() + 1][s2.length() + 1];
+
+        // 1 based indexing
+        for (int i1 = 1; i1 < dp.length; i1++) {
+            for (int i2 = 1; i2 < dp[i1].length; i2++) {
+                if (s1.charAt(i1 - 1) == s2.charAt(i2 - 1)) {
+                    dp[i1][i2] = 1 + dp[i1 - 1][i2 - 1];
+                } else {
+                    int t1 = dp[i1 - 1][i2];
+                    int t2 = dp[i1][i2 - 1];
+
+                    dp[i1][i2] = Math.max(t1, t2);
+                }
+            }
+        }
+
+        return dp[s1.length()][s2.length()];
+    }
+
 }
