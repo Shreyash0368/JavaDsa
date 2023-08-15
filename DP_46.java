@@ -141,4 +141,42 @@ public class DP_46 {
         return dp[s1.length()][s2.length()];
     }
 
+    public static void printLcs(String s1, String s2) {
+        int[][] dp = new int[s1.length() + 1][s2.length() + 1];
+
+        // 1 based indexing
+        for (int i1 = 1; i1 < dp.length; i1++) {
+            for (int i2 = 1; i2 < dp[i1].length; i2++) {
+                if (s1.charAt(i1 - 1) == s2.charAt(i2 - 1)) {
+                    dp[i1][i2] = 1 + dp[i1 - 1][i2 - 1];
+                } else {
+                    int t1 = dp[i1 - 1][i2];
+                    int t2 = dp[i1][i2 - 1];
+
+                    dp[i1][i2] = Math.max(t1, t2);
+                }
+            }
+        }
+
+        StringBuilder temp = new StringBuilder();
+
+        for (int i1 = s1.length(), i2 = s2.length(); i1 > 0 && i2 > 0;) {
+            if (s1.charAt(i1 - 1) == s2.charAt(i2 - 1)) {
+                temp.append(s1.charAt(i1 - 1));
+                i1--;
+                i2--;
+            }
+            else {
+                if (dp[i1 - 1][i2] > dp[i1][i2 - 1]) i1--;
+                else i2--;
+            }
+        }
+
+        System.out.println(temp.reverse().toString());
+    }
+
+    public static void main(String[] args) {
+        printLcs("abcdb", "bcacdhb");
+    }
+
 }
